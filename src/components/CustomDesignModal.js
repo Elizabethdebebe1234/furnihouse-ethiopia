@@ -235,7 +235,10 @@ export default function CustomDesignModal({ onClose }) {
 
   const [step, setStep] = useState(1);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [ethiopianView, setEthiopianView] = useState(null);
+  const [ethiopianView, setEthiopianView] = useState(() => {
+  const today = getTodayGregorian();
+  return toEC(today.year, today.month, today.day);
+});
 const [todayISO, setTodayISO] = useState("");
 
   const [form, setForm] = useState({
