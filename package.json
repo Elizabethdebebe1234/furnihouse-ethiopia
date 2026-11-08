@@ -3,12 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
+    "framer-motion": "^14.10.1",
+    "kenat": "^4.0.0",
+    "lucide-react": "^1.70.0",
+    "mongoose": "^9.12.0",
     "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0"
