@@ -200,15 +200,7 @@ function getGregorianISO(year, month, day) {
   ].join("-");
 }
 
-function todayISO() {
-  const today = getTodayGregorian();
 
-  return [
-    today.year,
-    String(today.month).padStart(2, "0"),
-    String(today.day).padStart(2, "0"),
-  ].join("-");
-}
 
 function getEthiopianMonthLength(year, month) {
   if (month < 13) {
@@ -235,11 +227,8 @@ export default function CustomDesignModal({ onClose }) {
 
   const [step, setStep] = useState(1);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [ethiopianView, setEthiopianView] = useState(() => {
-  const today = getTodayGregorian();
-  return toEC(today.year, today.month, today.day);
-});
-const [todayISO, setTodayISO] = useState("");
+   const [ethiopianView, setEthiopianView] = useState(null);
+const [todayISOValue, setTodayISOValue] = useState("");
 
   const [form, setForm] = useState({
     category: "",
@@ -259,6 +248,7 @@ const [submitError, setSubmitError] = useState("");
 
   // Reset the calendar to today's Ethiopian month
   // whenever the selected language changes.
+  
   useEffect(() => {
   const today = getTodayGregorian();
 
@@ -268,7 +258,7 @@ const [submitError, setSubmitError] = useState("");
     String(today.day).padStart(2, "0"),
   ].join("-");
 
-  setTodayISO(iso);
+  setTodayISOValue(iso);
 
   setEthiopianView(
     toEC(today.year, today.month, today.day)
@@ -378,7 +368,7 @@ async function submit(e) {
     );
 
     // Do not allow dates in the past.
-    if (selectedISO < todayISO()) {
+    if (todayISOValue && selectedISO < todayISOValue) {
       return;
     }
 
@@ -605,7 +595,7 @@ async function submit(e) {
               // ENGLISH: GREGORIAN CALENDAR
               <input
                 type="date"
-                min={todayISO()}
+                min={todayISOValue}
                 value={form.appointment}
                 onChange={(e) =>
                   update("appointment", e.target.value)
@@ -626,7 +616,7 @@ async function submit(e) {
                     : text.chooseDate}
                 </button>
 
-                {showCalendar && (
+                {showCalendar && ethiopianView && (
                   <div className="ethiopian-calendar-panel">
                     {/* MONTH AND YEAR HEADER */}
 
@@ -689,7 +679,7 @@ async function submit(e) {
                         );
 
                         const isPast =
-                          dateISO < todayISO();
+  todayISOValue && dateISO < todayISOValue;
 
                         const isSelected =
                           dateISO === form.appointment;
