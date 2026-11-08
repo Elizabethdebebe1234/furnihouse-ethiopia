@@ -3,13 +3,7 @@ import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-console.log("MongoDB URI check:", {
-  exists: Boolean(MONGODB_URI),
-  startsCorrectly:
-    MONGODB_URI?.startsWith("mongodb://") ||
-    MONGODB_URI?.startsWith("mongodb+srv://"),
-  firstCharacters: MONGODB_URI?.slice(0, 15),
-});
+
 
 if (!MONGODB_URI) {
   throw new Error("Please add MONGODB_URI to .env.local");
@@ -30,7 +24,9 @@ async function connectDB() {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI);
+    cached.promise = mongoose.connect(MONGODB_URI, {
+  dbName: "test",
+});
   }
 
   cached.conn = await cached.promise;
